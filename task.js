@@ -10,8 +10,6 @@ class Game {
     this.reset();
 
     this.registerEvents();
-
-    let x = this;
   }
 
   reset() { // перезагрузка игры
