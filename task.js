@@ -1,19 +1,20 @@
 class Game {
   constructor(container) {
     this.container = container;
-    this.wordElement = container.querySelector('.word');
-    this.winsElement = container.querySelector('.status__wins');
-    this.lossElement = container.querySelector('.status__loss');
-    this.characters = container.querySelectorAll('.symbol').length; // количество символов
+    this.wordElement = container.querySelector('.word'); // доступ к слову
+    this.winsElement = container.querySelector('.status__wins'); // правильно введенные слова
+    this.lossElement = container.querySelector('.status__loss'); // неправильно введенные слова
     this.сountdown = container.querySelector('.status__timer'); // таймер
+    this.characters = container.querySelectorAll('.symbol'); // массив символов
 
-    this.reset();
+    this.reset(); // запуск игры
 
     this.registerEvents();
   }
 
   reset() { // перезагрузка игры
     this.setNewWord(); // генерация нового слова
+    this.timer(); // запуск таймера
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
   }
@@ -27,18 +28,17 @@ class Game {
       }
     }) 
     document.addEventListener('keydown', updatePlayer); // обработчик события клавиатуры
-    
-    setInterval(() => { // добавление интервала, через который начнется новая игра
-      this.reset();
-    }, 1000 * this.сountdown.textContent); 
-
-    this.timer();
   }
 
   timer() { // работа таймера
-    setInterval(() => {
-      --this.сountdown.textContent;
-    }, 1000);
+    let timerId = setInterval(() => { // уменьшение счетчика
+      if (this.сountdown.textContent > 0){ // если таймер больше 0
+        --this.сountdown.textContent; // -1
+      } else {
+        clearInterval(timerId); // отменить интервал
+        return this.reset(); // выйти из функции, вернуть новую игру
+      }
+    }, 1000); 
   }
 
   success() {
@@ -97,8 +97,8 @@ class Game {
       .join('');
 
     this.wordElement.innerHTML = html;
-    this.сountdown.textContent = word.length; // переопределение счетчика
-    this.currentSymbol = this.wordElement.querySelector('.symbol_current');
+    this.сountdown.textContent = word.length; // определение счетчика
+    this.currentSymbol = this.wordElement.querySelector('.symbol_current'); // тот символ, который нужжно ввести
   }
 }
 
